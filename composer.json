@@ -1,0 +1,59 @@
+{
+    "name": "acadea/laravel-snapshotable",
+    "description": "Take a snapshot of a Laravel model. Record model information at a given time.",
+    "keywords": [
+        "acadea",
+        "laravel-snapshotable"
+    ],
+    "homepage": "https://github.com/acadea/laravel-snapshotable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "sam-ngu",
+            "email": "opensource@acadea.io",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "spatie/laravel-package-tools": "^1.4.3",
+        "illuminate/contracts": "^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.13",
+        "phpunit/phpunit": "^9.3",
+        "spatie/laravel-ray": "^1.9",
+        "vimeo/psalm": "^4.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Acadea\\Snapshot\\": "src",
+            "Acadea\\Snapshot\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Acadea\\Snapshot\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit --colors=always",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Acadea\\Snapshot\\SnapshotServiceProvider"
+            ],
+            "aliases": {
+                "Snapshot": "Acadea\\Snapshot\\SnapshotFacade"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
