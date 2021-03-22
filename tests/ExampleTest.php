@@ -2,11 +2,14 @@
 
 namespace Acadea\Snapshot\Tests;
 
+use Acadea\Snapshot\Snapshot;
+
 class ExampleTest extends TestCase
 {
-    /** @test */
-    public function true_is_true()
+    public function test_config()
     {
-        $this->assertTrue(true);
+        $snapshot = new Snapshot([
+            ''
+        ]);
     }
 }
