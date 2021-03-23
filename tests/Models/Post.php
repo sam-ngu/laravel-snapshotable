@@ -11,9 +11,22 @@ class Post extends Model
 {
     use HasFactory, Snapshotable;
 
+
     protected $fillable = [
         'title',
     ];
+
+    protected function toSnapshotRelation()
+    {
+        return [
+            'comments' => function(Comment $comment){
+                return $comment->only('title');
+            },
+            'comments.tags' => function(Tag $tag){
+                return $tag->title;
+            }
+        ];
+    }
 
 
     public function comments()

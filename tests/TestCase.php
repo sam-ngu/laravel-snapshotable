@@ -42,6 +42,7 @@ class TestCase extends Orchestra
         (new \CreateSnapshotTable())->up();
         (new \CreatePostsTestTable())->up();
         (new \CreateCommentsTestTable())->up();
+        (new \CreateTagsTestTable())->up();
         (new \CreateCommentTagPivotTestTable())->up();
 
     }

@@ -32,6 +32,10 @@ trait Snapshotable
         return [];
     }
 
+    protected function getNonPayloadAttributes()
+    {
+        return [$this->primaryKey, self::CREATED_AT, self::UPDATED_AT];
+    }
 
     /**
      * Take a snapshot of the model
@@ -41,7 +45,39 @@ trait Snapshotable
     {
         $attributes = $this->getAttributes();
 
-        $excepted = Arr::except($attributes, ['id', 'created_at', 'updated_at']);
+        $excepted = Arr::except($attributes, $this->getNonPayloadAttributes());
+
+        // convert relationships into payload
+        $relations = $this->toSnapshotRelation();
+
+        $modelWithRelations = $this->loadMissing(array_keys($relations));
+
+//        dd($modelWithRelations);
+
+        collect($relations)
+            ->sortBy(fn ($callback, $relation) => $relations) // sort relationship in asc so once we reached nested we can be sure the parent is already loaded
+            ->each(function ($callback, $relation) use($modelWithRelations) {
+
+
+                // get all relations
+
+                // destructure dot notation
+                $exploded = explode('.', $relation);
+                if(sizeof($exploded) > 1){
+                    // we have nested relationship
+
+                    // retrieve nested model, everything should be eager loaded by now
+
+                    data_set($this, $relation, $callback($this));
+
+                }
+
+                $related = data_get($modelWithRelations, $relation);
+
+                dd($modelWithRelations);
+
+
+            });
 
         /** @var $snapshot Snapshot */
         $snapshot = $this->snapshots()->create([
@@ -58,7 +94,6 @@ trait Snapshotable
     public function lastSnapshot()
     {
         // TODO: implement this
-
 
     }
 
