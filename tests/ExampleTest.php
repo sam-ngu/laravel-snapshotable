@@ -9,7 +9,7 @@ class ExampleTest extends TestCase
     public function test_config()
     {
         $snapshot = new Snapshot([
-            ''
+            '',
         ]);
     }
 }

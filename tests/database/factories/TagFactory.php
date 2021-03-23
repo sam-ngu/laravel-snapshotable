@@ -4,7 +4,6 @@
 namespace Acadea\Snapshot\Tests\Database\Factories;
 
 use Acadea\Snapshot\Tests\Models\Tag;
-use Acadea\Snapshot\Tests\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TagFactory extends Factory

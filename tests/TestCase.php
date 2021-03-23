@@ -2,9 +2,9 @@
 
 namespace Acadea\Snapshot\Tests;
 
+use Acadea\Snapshot\SnapshotServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Acadea\Snapshot\SnapshotServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -36,6 +36,5 @@ class TestCase extends Orchestra
 
         include_once __DIR__.'/../database/migrations/create_laravel_snapshotable_table.php.stub';
         (new \CreatePackageTable())->up();
-
     }
 }

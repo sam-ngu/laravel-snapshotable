@@ -12,7 +12,7 @@ class Comment extends Model
 
     protected $fillable = [
         'title',
-        'post_id'
+        'post_id',
     ];
 
     public function post()
@@ -24,6 +24,4 @@ class Comment extends Model
     {
         return $this->belongsToMany(Tag::class, 'comment_tag', 'comment_id', 'tag_id');
     }
-
-
 }

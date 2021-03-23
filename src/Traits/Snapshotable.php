@@ -3,7 +3,6 @@
 
 namespace Acadea\Snapshot\Traits;
 
-
 trait Snapshotable
 {
     /**
@@ -11,7 +10,6 @@ trait Snapshotable
      */
     public function snapshot()
     {
-
     }
 
     /**
@@ -20,10 +18,5 @@ trait Snapshotable
      */
     public function getSnapshots(callable $by)
     {
-
-
-
     }
-
-
 }

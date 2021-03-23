@@ -2,14 +2,12 @@
 
 namespace Acadea\Snapshot;
 
+use Acadea\Snapshot\Commands\SnapshotCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Acadea\Snapshot\Commands\SnapshotCommand;
 
 class SnapshotServiceProvider extends PackageServiceProvider
 {
-
-
     public function configurePackage(Package $package): void
     {
         /*
