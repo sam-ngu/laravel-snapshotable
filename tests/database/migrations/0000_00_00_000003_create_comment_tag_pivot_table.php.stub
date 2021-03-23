@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 
-class CreateCommentTagPivotTable extends Migration
+class CreateCommentTagPivotTestTable extends Migration
 {
     /**
      * Run the migrations.

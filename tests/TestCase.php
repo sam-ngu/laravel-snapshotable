@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Acadea\\Snapshot\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Acadea\\Snapshot\\Tests\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
@@ -34,8 +34,15 @@ class TestCase extends Orchestra
         ]);
 
 
-        include_once __DIR__.'/../database/migrations/create_laravel_snapshotable_table.php.stub';
-        (new \CreatePackageTable())->up();
+        include_once __DIR__.'/../database/migrations/0000_00_00_000000_create_snapshots_table.php';
+        include_once __DIR__.'/database/migrations/0000_00_00_000000_create_posts_test_table.php.stub';
+        include_once __DIR__.'/database/migrations/0000_00_00_000001_create_comments_test_table.php.stub';
+        include_once __DIR__.'/database/migrations/0000_00_00_000002_create_tags_test_table.php.stub';
+        include_once __DIR__.'/database/migrations/0000_00_00_000003_create_comment_tag_pivot_table.php.stub';
+        (new \CreateSnapshotTable())->up();
+        (new \CreatePostsTestTable())->up();
+        (new \CreateCommentsTestTable())->up();
+        (new \CreateCommentTagPivotTestTable())->up();
 
     }
 }

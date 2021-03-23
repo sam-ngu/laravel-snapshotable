@@ -13,6 +13,7 @@ class CommentFactory extends Factory
 
     public function definition()
     {
+
         return [
             'title' => $this->faker->realText(20),
             'post_id' => Post::all()->random()->id,

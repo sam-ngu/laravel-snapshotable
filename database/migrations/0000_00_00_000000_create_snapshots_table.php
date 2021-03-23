@@ -13,10 +13,15 @@ class CreateSnapshotTable extends Migration
 
             // add fields
             $table->string('snapshotable_type');
-            $table->foreign('snapshotable_id');
+            $table->foreignId('snapshotable_id');
             $table->json('payload')->nullable();
 
             $table->timestamps();
         });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('__snapshots');
     }
 }
