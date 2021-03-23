@@ -8,10 +8,13 @@ class CreateSnapshotTable extends Migration
 {
     public function up()
     {
-        Schema::create('laravel-snapshotable_table', function (Blueprint $table) {
+        Schema::create('__snapshots', function (Blueprint $table) {
             $table->id();
 
             // add fields
+            $table->string('snapshotable_type');
+            $table->foreign('snapshotable_id');
+            $table->json('payload')->nullable();
 
             $table->timestamps();
         });

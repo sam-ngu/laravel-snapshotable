@@ -21,7 +21,7 @@ class SnapshotServiceProvider extends PackageServiceProvider
             ->name('laravel-snapshotable')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_laravel_snapshotable_table')
+            ->hasMigration('create_snapshot_table')
             ->hasCommand(SnapshotCommand::class);
     }
 }

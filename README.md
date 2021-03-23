@@ -50,6 +50,17 @@ $laravel-snapshotable = new Acadea\Snapshot();
 echo $laravel-snapshotable->echoPhrase('Hello, Acadea!');
 ```
 
+### Create a Snapshot Model
+
+```php
+
+class TransactionSnapshot extends \Acadea\Snapshot\Models\Snapshot {
+  // ...
+}
+
+```
+
+
 ## Testing
 
 ```bash

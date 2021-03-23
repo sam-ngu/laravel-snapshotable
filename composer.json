@@ -33,7 +33,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Acadea\\Snapshot\\Tests\\": "tests"
+            "Acadea\\Snapshot\\Tests\\": "tests",
+            "Acadea\\Snapshot\\Tests\\Database": "tests/database",
+            "Acadea\\Snapshot\\Tests\\Database\\Factories": "tests/database/factories"
         }
     },
     "scripts": {
