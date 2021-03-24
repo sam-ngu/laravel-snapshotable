@@ -8,6 +8,7 @@ use Acadea\Snapshot\Models\Snapshot;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 trait Snapshotable
@@ -100,6 +101,18 @@ trait Snapshotable
     public function snapshots()
     {
         return $this->morphMany(Snapshot::class, 'snapshotable');
+    }
+
+    /**
+     * Take a snapshot for all models
+     */
+    public static function takeSnapshotForAll()
+    {
+        $snapshots = null;
+        DB::transaction(function () use(&$snapshots){
+            $snapshots = self::all()->map(fn (Model $model) => $model->takeSnapshot());
+        });
+        return $snapshots;
     }
 
 

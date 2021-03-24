@@ -6,9 +6,9 @@ use Illuminate\Console\Command;
 
 class SnapshotCommand extends Command
 {
-    public $signature = 'laravel-snapshotable';
+    public $signature = 'snapshot:all --model';
 
-    public $description = 'My command';
+    public $description = 'Take a snapshot for all the record of the given model.';
 
     public function handle()
     {

@@ -3,6 +3,7 @@
 namespace Acadea\Snapshot\Tests;
 
 
+use Acadea\Snapshot\Models\Snapshot;
 use Acadea\Snapshot\Tests\Models\Comment;
 use Acadea\Snapshot\Tests\Models\Post;
 use Acadea\Snapshot\Tests\Models\Tag;
@@ -126,6 +127,21 @@ class SnapshotTest extends TestCase
         $result = $post->removeSnapshot($snapshot->id);
 
         $this->assertSame(2, $post->snapshots->count());
+
+    }
+
+    public function test_can_take_snapshot_for_all()
+    {
+        $post1 = $this->createPost();
+        $post2 = $this->createPost();
+        $post3 = $this->createPost();
+
+        $snapshots = Post::takeSnapshotForAll();
+
+
+        $this->assertSame(3, $snapshots->count());
+        $this->assertSame(3, Snapshot::query()->count());
+
 
     }
 
