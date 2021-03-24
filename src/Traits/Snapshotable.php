@@ -57,161 +57,25 @@ trait Snapshotable
         $this->loadMissing(array_keys($relations));
 
 
-        $snapshotPayload = [];
+        $relationResults = collect($relations)->reduce(function ($carry, $next, $relation) {
 
-        $loadRelation = function (Model $model, string $relation, callable $callback){
-            return [
-                $relation => $callback($model)
-            ];
-        };
-
-        $results = collect($relations)
-            ->sortBy(fn($callback, $relation) => $relation); // sort relationship in asc so once we reached nested we can be sure the parent is already loaded
-
-
-        $results->reduce(function ($lastRelation, $callback, $currentRelation) use (&$snapshotPayload, $loadRelation){
-
-            $relationNames = explode('.', $currentRelation);
-
-//            if(  ){
-//
-//            }
-
-            $relationData = $this->{$currentRoot};
+            $relationData = $this->{$relation};
 
             if($relationData instanceof Collection){
-                // loop thru $relationData and load
 
-
+                $carry[$relation] = $relationData->map($next);
 
             }else{
-                $result = $loadRelation($relationData, );
+                $carry[$relation] = $next($relationData);
+            }
 
+            return $carry;
 
-            };
-
-        });
-
-
-
-
-
-
-
-
-
-
-        // split the relations into 2 group, nested and not nested
-        $grouped = collect($relations)->groupBy(function ($callback, $relation) {
-            // if nested, will have 'dot' in the relation string
-            $isNested = Str::contains($relation, '.');
-            return $isNested ? 'nested' : 'flat';
-        }, $preserveKeys = true);
-
-//        $nested = collect($grouped->get('nested'))
-//            ->
-
-//        function findAndLoadNestedRelation($model, $relation) use ($grouped){
-//
-//
-//        }
-//        findAndLoadNestedRelation($comment, 'comments.tags');
-
-        // $relation should exclude root
-//        function(Model $model, $relation){
-//            $exploded = explode('.', $relation);
-//            $model->getKey();
-//        }
-
-
-
-
-
-
-
-
-
-
-        collect($grouped->get('flat'))
-//            ->sortBy(fn($callback, $relation) => $relations) // sort relationship in asc so once we reached nested we can be sure the parent is already loaded
-            ->each(function ($callback, $relation) use($grouped) {
-
-                $relationData = $this->getRelation($relation);
-
-                if( $relationData instanceof Collection){
-
-                    $snapshotPayload = $relationData->map(function (Model $model) use($callback) {
-
-                        $model = $callback($model);
-
-                    });
-
-                    // find nested relationship
-                    $nested = collect($grouped->get('nested'));
-
-                    // filter out related relationship to current relation
-                    $filtered = $nested
-                        ->filter(function ($callback, $nestedRelation) use($relation) {
-                            [$root] = explode('.', $nestedRelation);
-                            return $root === $relation;
-                        })
-                        // sort by the nesting level
-                        ->sortBy(fn($callback, $relation) => sizeof(explode('.', $relation)));
-
-                    // goal: to fill in the nested relationship
-                    $filtered->each(function ($callback, $relation) use($snapshotPayload) {
-                        $exploded = explode('.', $relation);
-
-                        [$parent, $related] = array_slice($exploded, -2);
-
-                        dump($exploded);
-//                        dd($snapshotPayload);
-
-//                        data_set($snapshotPayload, )
-
-                    });
-
-                    dd($nested);
-
-                    // load it inside payload
-
-
-
-
-                }else {
-                    // belongsTo or One to One relationship
-                    $snapshotPayload = $callback($relationData);
-
-                    // we want to check if next root is still the same, and keep going if yes
-                }
-
-                dd($snapshotPayload);
-
-//                // get all relations
-//
-//                // destructure dot notation
-//                $exploded = explode('.', $relation);
-//                if (sizeof($exploded) > 1) {
-//                    // we have nested relationship
-////                    dd($modelWithRelations->getRelations());
-////                    dd($relation);
-//                    dd($this->getRelations());
-//                    // retrieve nested model, everything should be eager loaded by now
-//
-//                    data_set($this, $relation, $callback($this));
-//                    dd($this);
-//                }
-
-//                $related = data_get($modelWithRelations, $relation);
-
-//                dd($modelWithRelations);
-
-
-            });
+        }, []);
 
         /** @var $snapshot Snapshot */
         $snapshot = $this->snapshots()->create([
-            'payload' => $excepted
+            'payload' => array_merge($excepted, $relationResults)
         ]);
 
         return $snapshot;

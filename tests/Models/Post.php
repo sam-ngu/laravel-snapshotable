@@ -22,18 +22,18 @@ class Post extends Model
             'user' => function(User $user){
                 return $user->only('name');
             },
-            'comments.tags' => function(Tag $tag){
-                return $tag->title;
-            },
-            'user.comments.tags' => function(Tag $tag){
-                return $tag->only('title');
-            },
+//            'comments.tags' => function(Tag $tag){
+//                return $tag->title;
+//            },
+//            'user.comments.tags' => function(Tag $tag){
+//                return $tag->only('title');
+//            },
             'comments' => function(Comment $comment){
                 return $comment->only('title');
             },
-            'user.comments' => function(Comment $comment){
-                return $comment->only('title');
-            },
+//            'user.comments' => function(Comment $comment){
+//                return $comment->only('title');
+//            },
 
         ];
     }

@@ -24,10 +24,11 @@ class SnapshotTest extends TestCase
 
         $tags = Tag::factory()->count(3)->create();
 
-        $comments->each(fn (Comment $comment) => $comment->tags()->sync($tags->only('id')));
+        $comments->each(fn (Comment $comment) => $comment->tags()->sync($tags->pluck('id')));
 
         return $post;
     }
+
 
     public function test_can_record_model_attributes()
     {
@@ -43,12 +44,13 @@ class SnapshotTest extends TestCase
         // checking all keys are available in payload
         $attributes = Arr::except($attributes, ['id', 'created_at', 'updated_at']);
 
-        foreach (array_keys($snapshotPayload) as $snapshotKey){
-            $this->assertArrayHasKey($snapshotKey, $attributes);
+        foreach ($attributes as $attribute => $value){
+
+            $this->assertArrayHasKey($attribute, $snapshotPayload);
         }
 
-        foreach ($snapshotPayload as $key => $value){
-            $this->assertSame(data_get($attributes, $key), $value);
+        foreach ($attributes as $attribute => $value){
+            $this->assertSame(data_get($snapshotPayload, $attribute), $value);
         }
     }
 
@@ -57,23 +59,41 @@ class SnapshotTest extends TestCase
     {
         $post = $this->createPost();
 
+        $snapshot = $post->takeSnapshot();
+
+        $snapshotPayload = $snapshot->payload;
+
+        $snapshotComments = data_get($snapshotPayload, 'comments');
+
+        $this->assertSameSize($post->comments, $snapshotComments, 'Snapshot taken has the same one to many value as original');
+
+    }
+
+    public function test_can_record_many_to_many()
+    {
+        // test pivot data
+        $post = $this->createPost();
+
+        /** @var Comment $comment */
+        $comment = $post->comments->first();
+
+        $snapshot = $comment->takeSnapshot();
+
+        $tags = $comment->tags;
+
+        $snapshotTags = data_get($snapshot->payload, 'tags');
+
+        $this->assertSameSize($tags, $snapshotTags);
+
+        // make sure all id are the same
+        array_map(function ($tag, $snapshotTag){
+            $this->assertSame($tag['id'], $snapshotTag['id'], 'Make sure all many to many ids are the same');
+        }, $tags->toArray(), $snapshotTags);
 
 
     }
 
-//    public function test_can_record_many_to_many()
-//    {
-//
-//        // test pivot data
-//
-//    }
-//
-//    public function test_can_record_recursively()
-//    {
-//
-//    }
-//
-//
+
 //    public function test_can_get_last_snapshot_taken()
 //    {
 //

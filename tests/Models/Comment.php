@@ -16,6 +16,15 @@ class Comment extends Model
         'post_id'
     ];
 
+    public function toSnapshotRelations()
+    {
+        return [
+            'tags' => function(Tag $tag){
+                return $tag->only('id', 'title');
+            }
+        ];
+    }
+
     public function post()
     {
         return $this->belongsTo(Post::class);
