@@ -5,7 +5,10 @@ namespace Acadea\Snapshot\Traits;
 
 
 use Acadea\Snapshot\Models\Snapshot;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 trait Snapshotable
 {
@@ -27,7 +30,7 @@ trait Snapshotable
      *  }
      * ]
      * */
-    protected function toSnapshotRelation()
+    protected function toSnapshotRelations()
     {
         return [];
     }
@@ -48,33 +51,82 @@ trait Snapshotable
         $excepted = Arr::except($attributes, $this->getNonPayloadAttributes());
 
         // convert relationships into payload
-        $relations = $this->toSnapshotRelation();
+        $relations = $this->toSnapshotRelations();
 
-        $modelWithRelations = $this->loadMissing(array_keys($relations));
+        // loadMissing is not a pure function, load rel to the model instance
+        $this->loadMissing(array_keys($relations));
 
-//        dd($modelWithRelations);
+        // split the relations into 2 group, nested and not nested
+        $grouped = collect($relations)->groupBy(function ($callback, $relation) {
+            // if nested, will have 'dot' in the relation string
+            $isNested = Str::contains($relation, '.');
+            return $isNested ? 'nested' : 'flat';
+        }, $preserveKeys = true);
 
-        collect($relations)
-            ->sortBy(fn ($callback, $relation) => $relations) // sort relationship in asc so once we reached nested we can be sure the parent is already loaded
-            ->each(function ($callback, $relation) use($modelWithRelations) {
+//        $nested = collect($grouped->get('nested'))
+//            ->
+
+//        function findAndLoadNestedRelation($model, $relation) use ($grouped){
+//
+//
+//        }
+//        findAndLoadNestedRelation($comment, 'comments.tags');
 
 
-                // get all relations
 
-                // destructure dot notation
-                $exploded = explode('.', $relation);
-                if(sizeof($exploded) > 1){
-                    // we have nested relationship
+        collect($grouped->get('flat'))
+//            ->sortBy(fn($callback, $relation) => $relations) // sort relationship in asc so once we reached nested we can be sure the parent is already loaded
+            ->each(function ($callback, $relation) use($grouped) {
 
-                    // retrieve nested model, everything should be eager loaded by now
+                $relationData = $this->getRelation($relation);
 
-                    data_set($this, $relation, $callback($this));
+                if( $relationData instanceof Collection){
+                    $payload = $relationData->map($callback);
 
+                    // find nested relationship
+                    $nested = collect($grouped->get('nested'));
+
+                    // filter out related relationship to current relation
+                    $filtered = $nested->filter(function ($callback, $nestedRelation) use($relation) {
+
+                        [$root] = explode('.', $nestedRelation);
+                        return $root === $relation;
+
+                    });
+
+                    dd($filtered);
+
+                    dd($nested);
+
+                    // load it inside payload
+
+
+
+
+                }else {
+                    $payload = $callback($relationData);
                 }
 
-                $related = data_get($modelWithRelations, $relation);
+                dd($payload);
 
-                dd($modelWithRelations);
+//                // get all relations
+//
+//                // destructure dot notation
+//                $exploded = explode('.', $relation);
+//                if (sizeof($exploded) > 1) {
+//                    // we have nested relationship
+////                    dd($modelWithRelations->getRelations());
+////                    dd($relation);
+//                    dd($this->getRelations());
+//                    // retrieve nested model, everything should be eager loaded by now
+//
+//                    data_set($this, $relation, $callback($this));
+//                    dd($this);
+//                }
+
+//                $related = data_get($modelWithRelations, $relation);
+
+//                dd($modelWithRelations);
 
 
             });
@@ -101,7 +153,7 @@ trait Snapshotable
      * Gets all snapshots
      * @param ?callable $by A callback to return the condition of search
      */
-    public function getSnapshots(?callable $by=null)
+    public function getSnapshots(?callable $by = null)
     {
         // TODO: implement this
 

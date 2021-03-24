@@ -7,35 +7,44 @@ use Acadea\Snapshot\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class User extends Model
 {
     use HasFactory, Snapshotable;
 
 
     protected $fillable = [
-        'title',
+        'name',
     ];
 
     protected function toSnapshotRelations()
     {
         return [
-            'comments' => function(Comment $comment){
-                return $comment->only('title');
+            'posts' => function(Post $post){
+                return $post->only('title');
             },
-            'comments.tags' => function(Tag $tag){
-                return $tag->title;
+            'posts.comments' => function(Comment $comment){
+                return $comment->title;
             }
         ];
     }
 
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
-    public function user()
+    public function profile()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne();
     }
+
+
+
+
 }

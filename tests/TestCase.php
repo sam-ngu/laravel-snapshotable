@@ -36,10 +36,12 @@ class TestCase extends Orchestra
 
         include_once __DIR__.'/../database/migrations/0000_00_00_000000_create_snapshots_table.php';
         include_once __DIR__.'/database/migrations/0000_00_00_000000_create_posts_test_table.php.stub';
+        include_once __DIR__.'/database/migrations/0000_00_00_000000_create_users_test_table.php.stub';
         include_once __DIR__.'/database/migrations/0000_00_00_000001_create_comments_test_table.php.stub';
         include_once __DIR__.'/database/migrations/0000_00_00_000002_create_tags_test_table.php.stub';
         include_once __DIR__.'/database/migrations/0000_00_00_000003_create_comment_tag_pivot_table.php.stub';
         (new \CreateSnapshotTable())->up();
+        (new \CreateUsersTestTable())->up();
         (new \CreatePostsTestTable())->up();
         (new \CreateCommentsTestTable())->up();
         (new \CreateTagsTestTable())->up();

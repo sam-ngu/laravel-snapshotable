@@ -14,7 +14,9 @@ class CreateCommentsTestTable extends Migration
             // add fields
             $table->string('title');
             $table->foreignId('post_id');
-            $table->foreign('post_id')->on('post')->references('id')->cascadeOnDelete();
+            $table->foreign('post_id')->on('posts')->references('id')->cascadeOnDelete();
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
