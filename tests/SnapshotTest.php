@@ -6,6 +6,7 @@ namespace Acadea\Snapshot\Tests;
 use Acadea\Snapshot\Tests\Models\Comment;
 use Acadea\Snapshot\Tests\Models\Post;
 use Acadea\Snapshot\Tests\Models\Tag;
+use Acadea\Snapshot\Tests\Models\User;
 use Illuminate\Support\Arr;
 
 class SnapshotTest extends TestCase
@@ -13,6 +14,7 @@ class SnapshotTest extends TestCase
 
     protected function createPost(): Post
     {
+        $user = User::factory()->count(3)->create();
         /** @var Post $post*/
         $post = Post::factory()->create();
 

@@ -14,7 +14,7 @@ trait Snapshotable
 {
     /*
      * An array of relation, key
-     * Supports the 'dot' notation to define the relationships
+     * Does NOT Supports the 'dot' notation to define the relationships
      *
      * Key -- dot notation relationship
      * Value -- function to tell Snapshotable how to store the relation in json
@@ -56,6 +56,51 @@ trait Snapshotable
         // loadMissing is not a pure function, load rel to the model instance
         $this->loadMissing(array_keys($relations));
 
+
+        $snapshotPayload = [];
+
+        $loadRelation = function (Model $model, string $relation, callable $callback){
+            return [
+                $relation => $callback($model)
+            ];
+        };
+
+        $results = collect($relations)
+            ->sortBy(fn($callback, $relation) => $relation); // sort relationship in asc so once we reached nested we can be sure the parent is already loaded
+
+
+        $results->reduce(function ($lastRelation, $callback, $currentRelation) use (&$snapshotPayload, $loadRelation){
+
+            $relationNames = explode('.', $currentRelation);
+
+//            if(  ){
+//
+//            }
+
+            $relationData = $this->{$currentRoot};
+
+            if($relationData instanceof Collection){
+                // loop thru $relationData and load
+
+
+
+            }else{
+                $result = $loadRelation($relationData, );
+
+
+            };
+
+        });
+
+
+
+
+
+
+
+
+
+
         // split the relations into 2 group, nested and not nested
         $grouped = collect($relations)->groupBy(function ($callback, $relation) {
             // if nested, will have 'dot' in the relation string
@@ -72,6 +117,19 @@ trait Snapshotable
 //        }
 //        findAndLoadNestedRelation($comment, 'comments.tags');
 
+        // $relation should exclude root
+//        function(Model $model, $relation){
+//            $exploded = explode('.', $relation);
+//            $model->getKey();
+//        }
+
+
+
+
+
+
+
+
 
 
         collect($grouped->get('flat'))
@@ -81,20 +139,37 @@ trait Snapshotable
                 $relationData = $this->getRelation($relation);
 
                 if( $relationData instanceof Collection){
-                    $payload = $relationData->map($callback);
+
+                    $snapshotPayload = $relationData->map(function (Model $model) use($callback) {
+
+                        $model = $callback($model);
+
+                    });
 
                     // find nested relationship
                     $nested = collect($grouped->get('nested'));
 
                     // filter out related relationship to current relation
-                    $filtered = $nested->filter(function ($callback, $nestedRelation) use($relation) {
+                    $filtered = $nested
+                        ->filter(function ($callback, $nestedRelation) use($relation) {
+                            [$root] = explode('.', $nestedRelation);
+                            return $root === $relation;
+                        })
+                        // sort by the nesting level
+                        ->sortBy(fn($callback, $relation) => sizeof(explode('.', $relation)));
 
-                        [$root] = explode('.', $nestedRelation);
-                        return $root === $relation;
+                    // goal: to fill in the nested relationship
+                    $filtered->each(function ($callback, $relation) use($snapshotPayload) {
+                        $exploded = explode('.', $relation);
+
+                        [$parent, $related] = array_slice($exploded, -2);
+
+                        dump($exploded);
+//                        dd($snapshotPayload);
+
+//                        data_set($snapshotPayload, )
 
                     });
-
-                    dd($filtered);
 
                     dd($nested);
 
@@ -104,10 +179,13 @@ trait Snapshotable
 
 
                 }else {
-                    $payload = $callback($relationData);
+                    // belongsTo or One to One relationship
+                    $snapshotPayload = $callback($relationData);
+
+                    // we want to check if next root is still the same, and keep going if yes
                 }
 
-                dd($payload);
+                dd($snapshotPayload);
 
 //                // get all relations
 //
