@@ -90,21 +90,10 @@ trait Snapshotable
         return $this->snapshots()->latest()->first();
     }
 
-    /**
-     * Gets all snapshots
-     * @param ?callable $by A callback to return the condition of search
-     */
-    public function getSnapshots(?callable $by = null)
-    {
-        // TODO: implement this
-
-
-    }
-
 
     public function removeSnapshot(string $snapshotId)
     {
-        // TODO: implement this
+        return $this->snapshots()->where('id', '=', $snapshotId)->delete();
     }
 
 

@@ -8,8 +8,6 @@ use Acadea\Snapshot\Commands\SnapshotCommand;
 
 class SnapshotServiceProvider extends PackageServiceProvider
 {
-
-
     public function configurePackage(Package $package): void
     {
         /*
@@ -20,8 +18,6 @@ class SnapshotServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-snapshotable')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_snapshot_table')
-            ->hasCommand(SnapshotCommand::class);
+            ->hasMigration('create_snapshots_table');
     }
 }

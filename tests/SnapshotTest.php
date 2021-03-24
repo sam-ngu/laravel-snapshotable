@@ -113,11 +113,21 @@ class SnapshotTest extends TestCase
         $this->assertSame($snapshot->id, $lastSnapshot->id, 'Last snapshot id is not the same');
 
     }
-//
-//    public function test_can_()
-//    {
-//
-//    }
+
+
+    public function test_snapshot_can_be_deleted()
+    {
+        $post = $this->createPost();
+
+        $snapshot = $post->takeSnapshot();
+        $snapshot = $post->takeSnapshot();
+        $snapshot = $post->takeSnapshot();
+
+        $result = $post->removeSnapshot($snapshot->id);
+
+        $this->assertSame(2, $post->snapshots->count());
+
+    }
 
 
 }

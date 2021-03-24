@@ -10,11 +10,7 @@ This is where your description should go. Limit it to a paragraph or two. Consid
 
 ## Support us
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/package-laravel-snapshotable-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/package-laravel-snapshotable-laravel)
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
@@ -45,12 +41,32 @@ return [
 
 ## Usage
 
+Apply the Snapshotable trait to any model.
+
 ```php
-$laravel-snapshotable = new Acadea\Snapshot();
-echo $laravel-snapshotable->echoPhrase('Hello, Acadea!');
+
+class Post extends \Illuminate\Database\Eloquent\Model {
+
+    use Acadea\Snapshot\Traits\Snapshotable;
+    // ...
+}
+
 ```
 
-### Create a Snapshot Model
+Then we can take a snapshot by:
+
+```php
+
+/** @var \Acadea\Snapshot\Tests\Models\Post $post */
+$snapshot = $post->takeSnapshot();
+
+
+```
+
+
+### Create a Custom Snapshot Model
+
+Feel free to extend the Snapshot base model if you need any further customisation. However, you will need to create new migration files.
 
 ```php
 
