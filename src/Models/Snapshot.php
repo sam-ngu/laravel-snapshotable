@@ -3,16 +3,14 @@
 
 namespace Acadea\Snapshot\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 class Snapshot extends Model
 {
-
     protected $guarded = [ 'id', 'created_at', 'updated_at' ];
 
     protected $casts = [
-        'payload' => 'array'
+        'payload' => 'array',
     ];
 
     public function getTable()
@@ -29,9 +27,4 @@ class Snapshot extends Model
     {
         return $this->morphTo('snapshotable');
     }
-
-
-
-
-
 }

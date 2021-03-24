@@ -14,11 +14,8 @@ class Tag extends Model
         'title',
     ];
 
-
     public function comments()
     {
         return $this->belongsToMany(Comment::class, 'comment_tag', 'tag_id', 'comment_id');
     }
-
-
 }

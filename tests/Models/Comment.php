@@ -9,19 +9,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use HasFactory, Snapshotable;
+    use HasFactory;
+    use Snapshotable;
 
     protected $fillable = [
         'title',
-        'post_id'
+        'post_id',
     ];
 
     public function toSnapshotRelations()
     {
         return [
-            'tags' => function(Tag $tag){
+            'tags' => function (Tag $tag) {
                 return $tag->only('id', 'title');
-            }
+            },
         ];
     }
 
@@ -39,6 +40,4 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-
 }

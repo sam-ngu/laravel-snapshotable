@@ -3,13 +3,11 @@
 
 namespace Acadea\Snapshot\Traits;
 
-
 use Acadea\Snapshot\Models\Snapshot;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 trait Snapshotable
 {
@@ -59,29 +57,24 @@ trait Snapshotable
 
 
         $relationResults = collect($relations)->reduce(function ($carry, $next, $relation) {
-
             $relationData = $this->{$relation};
 
-            if($relationData instanceof Collection){
-
+            if ($relationData instanceof Collection) {
                 $carry[$relation] = $relationData->map($next);
-
-            }else{
+            } else {
                 $carry[$relation] = $next($relationData);
             }
 
             return $carry;
-
         }, []);
 
         /** @var $snapshot Snapshot */
         $snapshot = $this->snapshots()->create([
-            'payload' => array_merge($excepted, $relationResults)
+            'payload' => array_merge($excepted, $relationResults),
         ]);
 
         return $snapshot;
     }
-
 
     /**
      * Retrieve the last taken snapshot
@@ -91,12 +84,10 @@ trait Snapshotable
         return $this->snapshots()->latest()->first();
     }
 
-
     public function removeSnapshot(string $snapshotId)
     {
         return $this->snapshots()->where('id', '=', $snapshotId)->delete();
     }
-
 
     public function snapshots()
     {
@@ -109,11 +100,10 @@ trait Snapshotable
     public static function takeSnapshotForAll()
     {
         $snapshots = null;
-        DB::transaction(function () use(&$snapshots){
+        DB::transaction(function () use (&$snapshots) {
             $snapshots = self::all()->map(fn (Model $model) => $model->takeSnapshot());
         });
+
         return $snapshots;
     }
-
-
 }

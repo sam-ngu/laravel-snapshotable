@@ -2,9 +2,9 @@
 
 namespace Acadea\Snapshot\Tests;
 
+use Acadea\Snapshot\SnapshotServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Acadea\Snapshot\SnapshotServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -46,6 +46,5 @@ class TestCase extends Orchestra
         (new \CreateCommentsTestTable())->up();
         (new \CreateTagsTestTable())->up();
         (new \CreateCommentTagPivotTestTable())->up();
-
     }
 }

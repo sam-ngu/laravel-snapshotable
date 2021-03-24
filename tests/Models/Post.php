@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use HasFactory, Snapshotable;
+    use HasFactory;
+    use Snapshotable;
 
 
     protected $fillable = [
@@ -19,7 +20,7 @@ class Post extends Model
     protected function toSnapshotRelations()
     {
         return [
-            'user' => function(User $user){
+            'user' => function (User $user) {
                 return $user->only('name');
             },
 //            'comments.tags' => function(Tag $tag){
@@ -28,7 +29,7 @@ class Post extends Model
 //            'user.comments.tags' => function(Tag $tag){
 //                return $tag->only('title');
 //            },
-            'comments' => function(Comment $comment){
+            'comments' => function (Comment $comment) {
                 return $comment->only('title');
             },
 //            'user.comments' => function(Comment $comment){
@@ -37,7 +38,6 @@ class Post extends Model
 
         ];
     }
-
 
     public function comments()
     {

@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-    use HasFactory, Snapshotable;
+    use HasFactory;
+    use Snapshotable;
 
 
     protected $fillable = [
@@ -23,13 +24,8 @@ class Profile extends Model
         ];
     }
 
-
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-
-
-
 }
