@@ -87,8 +87,7 @@ trait Snapshotable
      */
     public function lastSnapshot()
     {
-        // TODO: implement this
-
+        return $this->snapshots()->latest()->first();
     }
 
     /**

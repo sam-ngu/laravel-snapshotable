@@ -73,8 +73,8 @@ class SnapshotTest extends TestCase
     {
         // test pivot data
         $post = $this->createPost();
-
         /** @var Comment $comment */
+
         $comment = $post->comments->first();
 
         $snapshot = $comment->takeSnapshot();
@@ -94,10 +94,25 @@ class SnapshotTest extends TestCase
     }
 
 
-//    public function test_can_get_last_snapshot_taken()
-//    {
-//
-//    }
+    public function test_can_get_last_snapshot_taken()
+    {
+        $post = $this->createPost();
+
+        $this->travel(-5)->hours();
+
+        for ($ii = 0; $ii < 10; $ii++){
+            $post->takeSnapshot();
+        }
+
+        $this->travelBack();
+
+        $snapshot = $post->takeSnapshot();
+
+        $lastSnapshot = $post->lastSnapshot();
+
+        $this->assertSame($snapshot->id, $lastSnapshot->id, 'Last snapshot id is not the same');
+
+    }
 //
 //    public function test_can_()
 //    {
