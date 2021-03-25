@@ -1,4 +1,4 @@
-# Take a snapshot of a Laravel model. Record model information at a given time.
+# Laravel Snapshotable
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/acadea/laravel-snapshotable.svg?style=flat-square)](https://packagist.org/packages/acadea/laravel-snapshotable)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/acadea/laravel-snapshotable/run-tests?label=tests)](https://github.com/acadea/laravel-snapshotable/actions?query=workflow%3ATests+branch%3Amaster)
@@ -6,9 +6,28 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/acadea/laravel-snapshotable.svg?style=flat-square)](https://packagist.org/packages/acadea/laravel-snapshotable)
 
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Take a snapshot of a Laravel model. Record model information at a given time.
+
+```php
+
+// taking a snapshot
+$snapshot = $model->takeSnapshot();
+
+// getting the last taken snapshot
+$lastSnapshot = $model->lastSnapshot();
+
+
+```
 
 ## Support us
+
+Other than creating open source packages, we also have a lot of web development tutorials. You can support us by following us in the following channels:
+
+[Youtube](https://www.youtube.com/channel/UCU5RsUGkVcPM9QvFHyKm1OQ) -- Free Web development tutorial every week.
+
+[Medium Blog](https://sam-ngu.medium.com/) -- At least one article per month!
+
+Visit our [Learning Portal](https://acadea.io/learn) for premium web dev courses.
 
 
 
