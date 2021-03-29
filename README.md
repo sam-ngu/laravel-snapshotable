@@ -55,6 +55,11 @@ This is the contents of the published config file:
 
 ```php
 return [
+  'table_names' => [
+    // we can customise the table name that stores all the snapshots
+    'snapshot' => '__snapshots',
+  ]
+
 ];
 ```
 
@@ -68,22 +73,41 @@ class Post extends \Illuminate\Database\Eloquent\Model {
 
     use Acadea\Snapshot\Traits\Snapshotable;
     // ...
+
+    // By default, snapshotable will only store the local attributes of the model
+    // If we want to record attributes in foreign relations 
+    // we can return an array in the toSnapshotRelationMethod
+    // The key is the relationship name, as defined in our model
+    // the value is a callback function where we return the data that we want to store in the snapshot.
+    protected function toSnapshotRelations()
+    {
+      return [
+       'comments' => function (Comment $comment) {
+          return $comment->only('title');
+        },
+      ];
+    }
 }
 
 ```
 
-Then we can take a snapshot by:
+That's it! Then we can simply take a snapshot by:
 
 ```php
 
 /** @var \Acadea\Snapshot\Tests\Models\Post $post */
 $snapshot = $post->takeSnapshot();
 
+// we can retrieve the stored model attributes from snapshot payload 
+$snapshot->payload;
+
 
 ```
 
 
-### Create a Custom Snapshot Model
+
+
+<!-- ### Create a Custom Snapshot Model
 
 Feel free to extend the Snapshot base model if you need any further customisation. However, you will need to create new migration files.
 
@@ -93,7 +117,7 @@ class TransactionSnapshot extends \Acadea\Snapshot\Models\Snapshot {
   // ...
 }
 
-```
+``` -->
 
 
 ## Testing

@@ -27,4 +27,6 @@ class Snapshot extends Model
     {
         return $this->morphTo('snapshotable');
     }
+
+    
 }
