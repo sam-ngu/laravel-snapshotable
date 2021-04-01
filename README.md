@@ -21,7 +21,7 @@ $lastSnapshot = $model->lastSnapshot();
 
 ## Support us
 
-Other than creating open source packages, we also have a lot of web development tutorials. You can support us by following us in the following channels:
+Other than creating open source packages, we also create quality web development tutorials. You can support us by the following channels:
 
 [Youtube](https://www.youtube.com/channel/UCU5RsUGkVcPM9QvFHyKm1OQ) -- Free Web development tutorial every week.
 
@@ -77,8 +77,8 @@ class Post extends \Illuminate\Database\Eloquent\Model {
     // By default, snapshotable will only store the local attributes of the model
     // If we want to record attributes in foreign relations 
     // we can return an array in the toSnapshotRelationMethod
-    // The key is the relationship name, as defined in our model
-    // the value is a callback function where we return the data that we want to store in the snapshot.
+    // The array key is the relationship name, as defined in our model
+    // the value is a callback function where we return the data that we want to store in the snapshot for the relation.
     protected function toSnapshotRelations()
     {
       return [
@@ -105,8 +105,6 @@ $snapshot->payload;
 ```
 
 
-
-
 <!-- ### Create a Custom Snapshot Model
 
 Feel free to extend the Snapshot base model if you need any further customisation. However, you will need to create new migration files.
@@ -117,7 +115,8 @@ class TransactionSnapshot extends \Acadea\Snapshot\Models\Snapshot {
   // ...
 }
 
-``` -->
+``` 
+-->
 
 
 ## Testing
